@@ -1,1 +1,1 @@
-# Medical-Text-Classificiation-2
+# Medical-Text-Classification-2
