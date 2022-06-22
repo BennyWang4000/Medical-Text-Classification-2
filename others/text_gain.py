@@ -8,8 +8,8 @@ import numpy as np
 from gensim.models import word2vec
 from tqdm import tqdm
 # %%
-CSV_PATH = '..\..\..\data\df_jieba_remove.csv'
-W2V_LTP_PATH = '..\..\..\data\word2vec_jieba.model'
+CSV_PATH = 'D:\CodeRepositories\py_project\data_mining\data\df_jieba_none.csv'
+W2V_MODEL_PATH = 'D:\CodeRepositories\py_project\data_mining\data\word2vec_jieba_none.model'
 # %%
 df = pd.read_csv(CSV_PATH)
 df = df.sample(frac=1).reset_index(drop=True)
@@ -19,7 +19,7 @@ display(df.head())
 # %%
 # ask_lst = [literal_eval(lst) for lst in ask_lst]
 # %%
-w2v_model = word2vec.Word2Vec.load(W2V_LTP_PATH)
+w2v_model = word2vec.Word2Vec.load(W2V_MODEL_PATH)
 
 w2v_key_lst = w2v_model.wv.index_to_key
 # %% ===============================================
@@ -47,7 +47,7 @@ df['ask_clean_w2v'] = df['ask_clean'].apply(
 display(df.head())
 # %%
 
-df.to_csv(os.path.join('..\..\data\df_jieba_remove.csv'))
+df.to_csv(os.path.join('..\..\data\df_jieba_none_remove.csv'))
 # %% ===============================================
 # %%
 ask_df = df.loc[:, ['cat_id', 'ask_clean_w2v']]
@@ -173,5 +173,5 @@ display(preview.sort_values(['information_gain'], ascending=False))
 # %%
 preview = preview.sort_values(['information_gain'], ascending=False)
 # %%
-preview.to_csv('../../data/info_gain.csv')
+preview.to_csv('../../data/info_gain_none.csv')
 # %%

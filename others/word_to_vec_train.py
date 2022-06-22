@@ -6,7 +6,7 @@ import os
 from IPython.display import display
 import numpy as np
 # %%
-CSV_PATH = 'data\df_ltp_3.csv'
+CSV_PATH = 'D:\CodeRepositories\py_project\data_mining\data\df_jieba_none.csv'
 df = pd.read_csv(CSV_PATH)
 # %%
 display(df.head())
@@ -21,14 +21,13 @@ seed = 555
 sg = 0
 window_size = 5
 vector_size = 100
-min_count = 1
+min_count = 5
 workers = 4
 epochs = 5
 batch_words = 10000
-
-train_data = word2vec.LineSentence('./all_e_ws.txt')
+# %%
 model = word2vec.Word2Vec(
-    train_data,
+    ask_lst,
     min_count=min_count,
     vector_size=vector_size,
     workers=workers,
@@ -38,5 +37,8 @@ model = word2vec.Word2Vec(
     seed=seed,
     batch_words=batch_words
 )
+# %%
+model.save(
+    'D:\CodeRepositories\py_project\data_mining\data\word2vec_jieba_none.model')
 
-model.save('word2vec.model')
+# %%

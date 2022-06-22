@@ -1,20 +1,57 @@
 
 from turtle import forward
+import torch
 import torch.nn as nn
+import torch.nn.functional as F
+
+from gensim.models import word2vec
+
+import sys
+if '../' not in sys.path:
+    sys.path.append('../')
+from config import Config
 
 
-class SVM_model(nn.Module):
+class TextCNN(nn.Module):
 
-    def __init__(self):
-        super(SVM_model, self).__init__()
-        self.main = nn.Sequential(
-            nn.Linear(1, 2)
-        )
+    def __init__(self, cfg: Config):
+        super(TextCNN, self).__init__()
+        self.cfg = cfg
+
+        # V = cfg.embed_num
+        D = cfg.embed_dim
+        C = cfg.class_num
+        Ci = 1
+        Co = cfg.kernel_num
+        Ks = cfg.kernel_sizes
+
+        # self.w2v_model = word2vec.Word2Vec.load(w2v_model_path)
+
+        # self.embed = nn.Embedding(V, D)
+        # self.embed = nn.Embedding.from_pretrained(
+        #     torch.FloatTensor(self.w2v_model.wv.vectors))
+
+        self.convs = nn.ModuleList([nn.Conv2d(Ci, Co, (K, D)) for K in Ks])
+        self.dropout = nn.Dropout(cfg.dropout)
+        self.fc1 = nn.Linear(len(Ks) * Co, C)
+
+        # if self.cfg.static:
+        #     self.embed.weight.requires_grad = False
 
     def forward(self, x):
-        x = self.main(x)
-        return x
+        # x = self.embed(x)  # (N, W, D)
 
+        x = x.unsqueeze(1)  # (N, Ci, W, D)
 
-class text_cnn(nn.Module):
-    pass
+        x = [F.relu(conv(x)).squeeze(3)
+             for conv in self.convs]  # [(N, Co, W), ...]*len(Ks)
+
+        x = [F.max_pool1d(i, i.size(2)).squeeze(2)
+             for i in x]  # [(N, Co), ...]*len(Ks)
+
+        x = torch.cat(x, 1)
+
+        x = self.dropout(x)  # (N, len(Ks)*Co)
+        logit = self.fc1(x)  # (N, C)
+        return logit
+
