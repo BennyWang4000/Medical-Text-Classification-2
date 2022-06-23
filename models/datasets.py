@@ -7,26 +7,25 @@ from ast import literal_eval
 import torch
 import numpy as np
 
-import sys
-if '../' not in sys.path:
-    sys.path.append('../')
-from config import Config
 # %%
 
 
 class TextDataset(Dataset):
-    def __init__(self, cfg: Config):
+    def __init__(self, **cfg):
         '''TextDataset: torch.utils.data.Dataset
         param:
             data_path: str
             w2v_model_path: str,
             weight_path: str,
+            words_len: int,
+            embed_dim: int,
+            device: str,
         '''
-        self.data_df = pd.read_csv(cfg.data_path)
+        self.data_df = pd.read_csv(cfg['data_path'])
         self.data_df = self.data_df.sample(frac=1).reset_index(drop=True)
         self.data_df = self.data_df.loc[:, ['cat_id', 'ask_clean_w2v']]
-        self.w2v_model = word2vec.Word2Vec.load(cfg.w2v_model_path)
-        self.weight_df = pd.read_csv(cfg.weight_path)
+        self.w2v_model = word2vec.Word2Vec.load(cfg['w2v_model_path'])
+        self.weight_df = pd.read_csv(cfg['weight_path'])
 
         self.data_len = len(self.data_df.index)
         self.cfg = cfg
@@ -48,8 +47,8 @@ class TextDataset(Dataset):
 
         cat_id[row['cat_id']] = 1
 
-        weights = np.zeros((self.cfg.words_len, 1))
-        words_vec = np.zeros((self.cfg.words_len, self.cfg.embed_dim))
+        weights = np.zeros((self.cfg['words_len'], 1))
+        words_vec = np.zeros((self.cfg['words_len'], self.cfg['embed_dim']))
 
         for index, word in enumerate(words[:40]):
             if word in self.w2v_model.wv.index_to_key:
@@ -59,8 +58,8 @@ class TextDataset(Dataset):
 
         weights = weights.reshape(-1, 1)
 
-        return {'cat_id': torch.from_numpy(cat_id).float().to(self.cfg.device),
-                'words': torch.from_numpy(weights * words_vec).float().to(self.cfg.device),
+        return {'cat_id': torch.from_numpy(cat_id).float().to(self.cfg['device']),
+                'words': torch.from_numpy(weights * words_vec).float().to(self.cfg['device']),
                 'leng': weights.shape[0]}
 
     def __len__(self):

@@ -1,29 +1,32 @@
-
-from turtle import forward
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from gensim.models import word2vec
-
 import sys
 if '../' not in sys.path:
     sys.path.append('../')
-from config import Config
 
 
 class TextCNN(nn.Module):
 
-    def __init__(self, cfg: Config):
+    def __init__(self, **cfg):
+        '''
+        params:
+            embed_dim
+            class_num
+            kernel_num
+            kernel_sizes
+            dropout
+        '''
         super(TextCNN, self).__init__()
         self.cfg = cfg
 
-        # V = cfg.embed_num
-        D = cfg.embed_dim
-        C = cfg.class_num
+        # V = cfg['embed_num']
+        D = cfg['embed_dim']
+        C = cfg['class_num']
         Ci = 1
-        Co = cfg.kernel_num
-        Ks = cfg.kernel_sizes
+        Co = cfg['kernel_num']
+        Ks = cfg['kernel_sizes']
 
         # self.w2v_model = word2vec.Word2Vec.load(w2v_model_path)
 
@@ -32,10 +35,10 @@ class TextCNN(nn.Module):
         #     torch.FloatTensor(self.w2v_model.wv.vectors))
 
         self.convs = nn.ModuleList([nn.Conv2d(Ci, Co, (K, D)) for K in Ks])
-        self.dropout = nn.Dropout(cfg.dropout)
+        self.dropout = nn.Dropout(cfg['dropout'])
         self.fc1 = nn.Linear(len(Ks) * Co, C)
 
-        # if self.cfg.static:
+        # if self.cfg['static']:
         #     self.embed.weight.requires_grad = False
 
     def forward(self, x):
@@ -54,4 +57,4 @@ class TextCNN(nn.Module):
         x = self.dropout(x)  # (N, len(Ks)*Co)
         logit = self.fc1(x)  # (N, C)
         return logit
-
+# %%
