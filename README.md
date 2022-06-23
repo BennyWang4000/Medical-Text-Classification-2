@@ -103,6 +103,8 @@ Xgboost 的推薦深度為 6~10，但期中使用的參數已是 12，許多防�
 
 選用 Information gain
 
+## **Information gain**
+
 ![IG](https://i.stack.imgur.com/ooDtt.png)
 
 Information gain 的計算方法
@@ -124,7 +126,11 @@ information_gain|word
 0.0123994787547603|癫痫
 0.0121461987535613|咳嗽
 
-在下面這篇中提到，information gain 是最有效率的特徵擷取演算法之一，但有可能會出現雖然 information gain 很低，但其實他它很重要的情況。
+## **Weight**
+
+將 information gain 做 0-1 正規化成為權重使用
+
+不過在下面這篇中提到，雖然 information gain 是最有效率的特徵擷取演算法之一，但有可能會出現雖然 information gain 很低，但其實他它很重要的情況。
 
 > **Improved information gain feature selection method for Chinese text classification based on word embedding**\
 > Lei Zhu1, Guijun Wang1 and Xianchun Zou\
@@ -203,7 +209,7 @@ I_{i}=W_{i}\odotE, where \odot denotes the element-wise multiplication of two ma
 
 ![textcnn w weight](https://cdn.discordapp.com/attachments/747728438814703616/989415319598678067/unknown.png)
 
-最後輸出成class 大小
+最後輸出成 class 大小
 
 # **Result**
 
