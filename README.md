@@ -32,7 +32,7 @@ end
 cls --> out((Output Class))
 ```
 
-但在結果上並不理想，就算僅有內科與外科的分類準確率僅有將近80%。期末想沿用其中的題目，並找方法解決期中所遇到的各種問題。。
+但在結果上並不理想，就算僅有內科與外科的分類準確率僅有將近80%。期末想沿用其中的題目，並找方法解決期中所遇到的各種問題。
 
 以下為本次的 pipeline
 
@@ -191,7 +191,7 @@ I_{i}=W_{i}\odotE, where \odot denotes the element-wise multiplication of two ma
 
 最後輸出成class 大小
 
-## Result
+## **Result**
 
 train 了幾次，最好的準確率依然只有 83%
 
@@ -203,15 +203,18 @@ train 了幾次，最好的準確率依然只有 83%
 
 都沒有太大的改變，依然是在 80% 至 83% 徘徊
 
+![training accuracy](https://cdn.discordapp.com/attachments/747728438814703616/989428392971632720/WB_Chart_2022_6_23_3_13_10.png)
+![training loss](https://cdn.discordapp.com/attachments/747728438814703616/989428400018051102/WB_Chart_2022_6_23_3_13_23.png)
+
 其實除了換成其他模型，想不到還能用什麼技術讓他變得更好
 
-## Discussion
+## **Discussion**
 
 之所以不用 Huggingface Bert 是因為以前試過了，希望能在課堂報告利用不同的技術試試看。
 
 還有很東西沒有嘗試，ELMo、其他不同的 word space、不同的 feature selection algorithm、不同的 torch model 等等。原本計畫要用 Latent semantic analysis，但沒看很懂，下次再挑戰。
 
-## Reference
+## **Reference**
 
 [López, F. & Miller, S. (2020, September 18). Text Classification with CNNs in PyTorch. Towardsdatascience.](https://towardsdatascience.com/text-classification-with-cnns-in-pytorch-1113df31e79f)
 
