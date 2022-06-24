@@ -28,12 +28,18 @@ if __name__ == '__main__':
 
     model = TextCNN(embed_dim=EMBED_DIM, class_num=CLASS_NUM,
                     kernel_num=KERNEL_NUM, kernel_sizes=KERNEL_SIZES, dropout=DROPOUT).to(DEVICE)
+
+    if IS_WANDB:
+        import wandb
+        wandb.init(project="MedicalClassification", entity="bennywang4000")
+        wandb.watch(model)
+
     print(model)
     summary(model, (40, 100))
 
     for epoch in range(1, EPOCHS + 1):
         print('epoch:\t', epoch)
         train.train(model=model, train_loader=train_loader, epochs=EPOCHS, optimizer=OPTIMIZER, learning_rate=LEARNING_RATE,
-                    loss_func=LOSS_FUNC, log_interval=LOG_INTERVAL, batch_size=BATCH_SIZE, saving_path=SAVING_PATH)
+                    loss_func=LOSS_FUNC, log_interval=LOG_INTERVAL, batch_size=BATCH_SIZE, saving_path=SAVING_PATH, is_wandb=IS_WANDB)
         train.eval(model=model, test_loader=test_loader, epochs=EPOCHS,
-                   loss_func=LOSS_FUNC, log_interval=LOG_INTERVAL, batch_size=BATCH_SIZE)
+                   loss_func=LOSS_FUNC, log_interval=LOG_INTERVAL, batch_size=BATCH_SIZE, is_wandb=IS_WANDB)
