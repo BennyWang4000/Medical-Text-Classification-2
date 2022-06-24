@@ -2,10 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import sys
-if '../' not in sys.path:
-    sys.path.append('../')
-
 
 class TextCNN(nn.Module):
 
@@ -36,7 +32,9 @@ class TextCNN(nn.Module):
 
         self.convs = nn.ModuleList([nn.Conv2d(Ci, Co, (K, D)) for K in Ks])
         self.dropout = nn.Dropout(cfg['dropout'])
-        self.fc1 = nn.Linear(len(Ks) * Co, C)
+
+        self.fc2 = nn.Linear(len(Ks) * Co, len(Ks) * int(Co / 4))
+        self.fc1 = nn.Linear(len(Ks) * int(Co / 4), C)
 
         # if self.cfg['static']:
         #     self.embed.weight.requires_grad = False
@@ -55,6 +53,6 @@ class TextCNN(nn.Module):
         x = torch.cat(x, 1)
 
         x = self.dropout(x)  # (N, len(Ks)*Co)
+        x = self.fc2(x)  # (len(Ks)*Co, len(Ks)*Co/4)
         logit = self.fc1(x)  # (N, C)
         return logit
-# %%

@@ -154,7 +154,7 @@ P(phi(d) \| t)|the probability that the word t appears in the class phi(d)
 
 目前我的能力還不足以在這些時間下完成。
 
-我的想法是，既然我有 information gain，而且 word space 是用 Word2Vec，就可以直接使用他們傳回的 list 做跟動就好。
+我的想法是，既然我有 information gain，而且 word space 是用 Word2Vec，有一個 most_similar() 方法，使用傳回的 list 做更動就好。
 
 從information gain 最高的開始，每個跟其前十相關的字詞，自己的 information gain 加上跟它之間information gain 的差異乘以 similarity
 

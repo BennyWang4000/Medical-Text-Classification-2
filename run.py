@@ -27,11 +27,13 @@ if __name__ == '__main__':
         dataset=val_set, batch_size=BATCH_SIZE, shuffle=True)
 
     model = TextCNN(embed_dim=EMBED_DIM, class_num=CLASS_NUM,
-                    kernel_num=KERNEL_NUM, kernel_sizes=KERNEL_SIZES, dropout=DROPOUT)
+                    kernel_num=KERNEL_NUM, kernel_sizes=KERNEL_SIZES, dropout=DROPOUT).to(DEVICE)
     print(model)
-    # summary(model, (40, 100))
+    summary(model, (40, 100))
 
-    train.train(model=model, train_loader=train_loader, epochs=EPOCHS, optimizer=OPTIMIZER,
-                learning_rate=LEARNING_RATE, loss_func=LOSS_FUNC, log_interval=LOG_INTERVAL, batch_size=BATCH_SIZE)
-    train.eval(model=model, test_loader=test_loader, epochs=EPOCHS,
-               loss_func=LOSS_FUNC, log_interval=LOG_INTERVAL, batch_size=BATCH_SIZE)
+    for epoch in range(1, EPOCHS + 1):
+        print('epoch:\t', epoch)
+        train.train(model=model, train_loader=train_loader, epochs=EPOCHS, optimizer=OPTIMIZER, learning_rate=LEARNING_RATE,
+                    loss_func=LOSS_FUNC, log_interval=LOG_INTERVAL, batch_size=BATCH_SIZE, saving_path=SAVING_PATH)
+        train.eval(model=model, test_loader=test_loader, epochs=EPOCHS,
+                   loss_func=LOSS_FUNC, log_interval=LOG_INTERVAL, batch_size=BATCH_SIZE)
